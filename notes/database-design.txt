@@ -1,0 +1,53 @@
+Creating a fully relational database for my NEA project:
+The first thing that must be established is what kind of information needs to be collected.
+I have:
+a light sensor
+a soil moisture sensor
+temperature and humidity sensor
+
+i also want to track
+last watering time
+current time
+plant age?
+
+What real world objects could act as entities in my database?
+The main object is a Plant, and there are multiple plants
+I also want to track each Watering Event
+I want to take periodic data as well.
+So some timestamps will not be included in the watering events table, some will
+
+attributes so far:
+plantID
+plantName
+Date of sowing
+currentTime
+lightLevel
+temperature
+humidity
+soilMoisture
+WateringEvent? (Likely a boolean value. Or maybe just an action attribute)
+Action? (Watering/Nothing/Alert)
+Alert (Can be left null)
+
+I will definitely need at least two tables. One for the plant, plantname and date of planting etc
+Another for Polling
+PollingID as the primary key
+
+when should i use ActionID and ActionName vs just actionName?
+probably if i want to include it in multiple tables
+We want to avoid repeated info.
+
+Designing first iteration with DBBrowser
+[image]
+This is the first draft of something that I might use to store information. However, the aim here is to create a fully normalised table. Currently this would satisfy 1NF if i started putting values into cells, as each timestamp is going ot have only one value per cell in the record.
+
+PollingID is the intended primary key for this data. However if i started inputting values into records, a problem that would arise is that there would be repeated instances of PlantID, PlantAge  and PlantName. A new table would solve that issue, splitting them apart as such:
+
+
+Now all information about the plant is stored in the Plant table, removing the need to repeat data and preventing update anomalies.  However, not all Action and Alert Types are saved in a table. For example in the Polling table, the entries aren’t guaranteed to include every action and alert types. I will create AlertIDs so that every type is saved. The only action the plant can take is to water so I can create an attribute called IsWatered with Boolean values.
+
+Updated:
+[image.png]
+[image.png]
+
+I also considered tracking different actions taken to im
